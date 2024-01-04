@@ -1,9 +1,10 @@
 import { StripeService } from "./services/StripeService";
 import express, { Request, Response } from "express";
+import { Stripe } from "./services/mocks/Stripe";
 const PORT = 9000; // HINT: Should this value be an environment variable?
 
 const app = express();
-const stripeService = new StripeService('testStripeKey'); // HINT: Should the stripe key be static here? May be an environment variable should be used.
+const stripeService = new StripeService(new Stripe('testStripeKey')); // HINT: Should the stripe key be static here? May be an environment variable should be used.
 
 app.use(express.json());
 app.post('/stripe/payment', (_req: Request, res: Response) => {

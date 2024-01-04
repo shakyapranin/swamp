@@ -6,17 +6,39 @@ export class Stripe {
         this.stripeKey = stripeKey;
     }
 
-    processWalletPayment(amount: number): StripeResponse {
+    processWalletPayment(amount: number, details: Object = {}): StripeResponse {
         return {
             statusCode: STATUS_CODES.OK,
             message: `Wallet payment for ${amount} successfully processed.`
         }
     }
 
-    processCardPayment(amount: number): StripeResponse {
+    processCardPayment(amount: number, details: Object = {}): StripeResponse {
         return {
             statusCode: STATUS_CODES.OK,
             message: `Card payment for ${amount} successfully processed.`
+        }
+    }
+
+    validateWalletPayment(amount: number): boolean {
+        return true;
+    }
+
+    validateCardPayment(amount: number): boolean {
+        return true;
+    }
+
+    refundWalletPayment(amount: number): StripeResponse {
+        return {
+            statusCode: STATUS_CODES.OK,
+            message: `Wallet refund for ${amount} successfully processed.`
+        }
+    }
+
+    refundCardPayment(amount: number): StripeResponse {
+        return {
+            statusCode: STATUS_CODES.OK,
+            message: `Card refund for ${amount} successfully processed.`
         }
     }
 
