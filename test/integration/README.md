@@ -1,0 +1,1 @@
+# Store integration tests for testing the interaction between different components.

@@ -1,0 +1,1 @@
+# Store data models or interfaces used by the application.

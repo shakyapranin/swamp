@@ -1,0 +1,1 @@
+# Store controllers that handle the application's HTTP requests and responses.
