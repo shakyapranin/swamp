@@ -5,6 +5,7 @@ export class Stripe {
     constructor(stripeKey: string) {
         this.stripeKey = stripeKey;
     }
+
     processWalletPayment(amount: number): StripeResponse {
         return {
             statusCode: STATUS_CODES.OK,
