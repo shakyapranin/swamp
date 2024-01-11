@@ -1,9 +1,19 @@
 import { STATUS_CODES } from "../../consts/STATUSCODES"; // HINT: Is it good to use absolute paths? May be use an alias here?
-
+import { TRANSACTION_STATUS } from "../../consts/TRANSACTION_STATUS";
+import { Transaction } from "../../interfaces/Transaction";
+const mockTransactions = [
+    { amount: 100, status: TRANSACTION_STATUS.SUCCESS },
+    { amount: 200, status: TRANSACTION_STATUS.PENDING },
+    { amount: 300, status: TRANSACTION_STATUS.SUCCESS },
+  ];
 export class Stripe {
     stripeKey: string;
     constructor(stripeKey: string) {
         this.stripeKey = stripeKey;
+    }
+
+    getTransactions(): Array<Transaction> {
+        return mockTransactions;
     }
 
     processWalletPayment(amount: number, details: Object = {}): StripeResponse {
@@ -48,4 +58,5 @@ export class Stripe {
 export interface StripeResponse {
     statusCode: number;
     message: string;
+    data?: any;
 }

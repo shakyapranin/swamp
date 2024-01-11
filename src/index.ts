@@ -25,6 +25,10 @@ app.post('/stripe/refund', (req: Request, res: Response) => {
     return res.json(stripeController.refund(req));
 });
 
+app.post('/stripe/transaction', (req: Request, res: Response) => {
+    const stripeController = new StripeController('testStripeKey');
+    return res.json(stripeController.getTransactionByStatus(req));
+});
 
 // HINT: Should the PORT variable be used here after it has been converted into an environment variable?
 app.listen(9000, () => {

@@ -1,3 +1,4 @@
+import { STATUS_CODES } from "../consts/STATUSCODES";
 import InvalidDataException from "../exceptions/InvalidDataException";
 import { Transaction } from "../interfaces/Transaction";
 import { Stripe, StripeResponse } from "./mocks/Stripe";
@@ -74,15 +75,20 @@ export class StripeService {
      * @param status 
      * @returns 
      */
-    public getTransactionsByStatus(status: string): Array<{ amount: number, status: string }> {
+    public getTransactionsByStatus(status: string): StripeResponse {
         const result: Array<{ amount: number, status: string }> = [];
+        if(this.transactions.length < 0) this.transactions = this.stripeClient.getTransactions();
         for (const transaction of this.transactions) {
             // Simulate a slow string comparison
             if (this.compareString(transaction.status, status)) {
                 result.push(transaction);
             }
         }
-        return result;
+        return {
+            statusCode: STATUS_CODES.OK,
+            message: "Transactions were successfully fetched.",
+            data: result
+        };
     }
 
     /**

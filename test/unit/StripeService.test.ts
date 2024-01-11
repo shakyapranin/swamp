@@ -113,7 +113,7 @@ describe('getTransactionsByStatus', () => {
     const stripeService = new StripeService(new Stripe("stripe_key"), mockTransactions);
     const result = stripeService.getTransactionsByStatus('pending');
 
-    expect(result).toEqual([]);
+    expect(result.data).toEqual([]);
   });
 
   it('should return an array of transactions that match the status', () => {
@@ -125,7 +125,7 @@ describe('getTransactionsByStatus', () => {
     const stripeService = new StripeService(new Stripe("stripe_key"), mockTransactions);
     const result = stripeService.getTransactionsByStatus('success');
 
-    expect(result).toEqual([
+    expect(result.data).toEqual([
       { amount: 100, status: TRANSACTION_STATUS.SUCCESS },
       { amount: 300, status: TRANSACTION_STATUS.SUCCESS },
     ]);
