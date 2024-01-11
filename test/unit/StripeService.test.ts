@@ -1,8 +1,9 @@
 import { STATUS_CODES } from "../../src/consts/STATUSCODES";
+import { TRANSACTION_STATUS } from "../../src/consts/TRANSACTION_STATUS";
 import { StripeService } from "../../src/services/StripeService";
 import { Stripe } from "../../src/services/mocks/Stripe";
 
-describe("StripeService", () => {
+describe('processPayment', () => {
   // Create an instance of StripeService for testing
   let stripeService: StripeService;
 
@@ -101,3 +102,34 @@ describe('refundPayment', () => {
     expect(response.message).toBe("Invalid payment method");
   });
 });
+
+describe('getTransactionsByStatus', () => {
+
+  it('should return an empty array if no transactions match the status', () => {
+    const mockTransactions = [
+      { amount: 100, status: TRANSACTION_STATUS.SUCCESS },
+      { amount: 200, status: TRANSACTION_STATUS.SUCCESS },
+      { amount: 300, status: TRANSACTION_STATUS.FAILURE },
+    ];
+    const stripeService = new StripeService(new Stripe("stripe_key"), mockTransactions);
+    const result = stripeService.getTransactionsByStatus('pending');
+
+    expect(result).toEqual([]);
+  });
+
+  it('should return an array of transactions that match the status', () => {
+    const mockTransactions = [
+      { amount: 100, status: TRANSACTION_STATUS.SUCCESS },
+      { amount: 200, status: TRANSACTION_STATUS.PENDING },
+      { amount: 300, status: TRANSACTION_STATUS.SUCCESS },
+    ];
+    const stripeService = new StripeService(new Stripe("stripe_key"), mockTransactions);
+    const result = stripeService.getTransactionsByStatus('success');
+
+    expect(result).toEqual([
+      { amount: 100, status: TRANSACTION_STATUS.SUCCESS },
+      { amount: 300, status: TRANSACTION_STATUS.SUCCESS },
+    ]);
+  });
+});
+
