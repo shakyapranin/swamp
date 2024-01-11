@@ -9,6 +9,7 @@ import SwampResponse from "../interfaces/SwampResponse";
 
 export class StripeController {
     private stripeService: StripeService;
+    // HINT: Usually something like STRIPE can be initialized once and then shared throughout the application. Which is singleton behavior
     constructor(stripeKey: string) {
         this.stripeService = new StripeService(new Stripe('testStripeKey'));
     }
