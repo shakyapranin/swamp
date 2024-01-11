@@ -1,5 +1,6 @@
 import { STATUS_CODES } from "../../src/consts/STATUSCODES";
 import { TRANSACTION_STATUS } from "../../src/consts/TRANSACTION_STATUS";
+import InvalidDataException from "../../src/exceptions/InvalidDataException";
 import { StripeService } from "../../src/services/StripeService";
 import { Stripe } from "../../src/services/mocks/Stripe";
 
@@ -86,10 +87,8 @@ describe('refundPayment', () => {
     // TODO: Fix this to use mock instead of function override
     stripeService.stripeClient.validateCardPayment = () => false;
 
-    const response = stripeService.refundPayment(amount, paymentMethod);
-
-    expect(response.statusCode).toBe(STATUS_CODES.BAD_REQUEST);
-    expect(response.message).toBe("Invalid data.");
+    expect(() => stripeService.refundPayment(amount, paymentMethod))
+    .toThrow(InvalidDataException);
   });
 
   it("should return error for invalid payment method", () => {

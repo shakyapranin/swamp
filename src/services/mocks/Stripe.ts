@@ -29,6 +29,7 @@ export class Stripe {
     }
 
     refundWalletPayment(amount: number): StripeResponse {
+        // HINT: Ideally real world API services respond with such a JSON which we interpret as a consumer and throw exceptions
         return {
             statusCode: STATUS_CODES.OK,
             message: `Wallet refund for ${amount} successfully processed.`

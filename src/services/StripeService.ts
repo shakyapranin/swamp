@@ -1,3 +1,4 @@
+import InvalidDataException from "../exceptions/InvalidDataException";
 import { Transaction } from "../interfaces/Transaction";
 import { Stripe, StripeResponse } from "./mocks/Stripe";
 
@@ -45,6 +46,8 @@ export class StripeService {
             if(this.stripeClient.validateWalletPayment(amount)){
                 return this.stripeClient.refundWalletPayment(amount);
             }else {
+                // HINT: Usually its better to throw an exception from service layers rather than statusCode and a message.
+                // HINT: A controller should be responsible to handle the response type eg: MobileAPIController - Mobile XML response, WebAPIController - JSON response etc.
                 return {
                     statusCode: 400,
                     message: "Invalid data."
@@ -55,10 +58,8 @@ export class StripeService {
             if(this.stripeClient.validateCardPayment(amount)){
                 return this.stripeClient.refundCardPayment(amount);
             }else {
-                return {
-                    statusCode: 400,
-                    message: "Invalid data."
-                };
+                // HINT: May be we the exception message inside the class itself.
+                throw new InvalidDataException("Invalid data for card payment.");
             }
         }
 
