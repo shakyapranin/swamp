@@ -19,7 +19,7 @@ app.post('/stripe/payment', (req: Request, res: Response) => {
 
 // HINT: Should the routes being an API have prefix? '/api/'
 // HINT: Should there be versioning? '/api/v1/stripe'
-app.post('stripe/refund', (req: Request, res: Response) => {
+app.post('/stripe/refund', (req: Request, res: Response) => {
     // INFO: Notice how _req.body.amount would've been needed here if it were not for controllers and request builders which also helps with DRY principle
     const stripeController = new StripeController('testStripeKey'); // INFO: Notice how introduction of a controller is better than initializing a service in the index.ts itself
     return res.json(stripeController.refund(req));

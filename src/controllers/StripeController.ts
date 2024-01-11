@@ -35,7 +35,6 @@ export class StripeController {
             return {
                 statusCode: STATUS_CODES.OK,
                 message: response.message,
-                data: response
             }
         }catch (error) {
             if(error instanceof InvalidDataException) {
