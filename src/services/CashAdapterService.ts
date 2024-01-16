@@ -15,6 +15,7 @@ export default class CashAdapterService implements PaymentProcessorInterface {
     }
 
     /**
+     * HINT: May be this method should throw an exception rathen than constructing a Response
      * INFO: Notice how processPayment complies the PaymentProcessorInterface contract and acts as a proxy to cash service which is 
      * incompatible directly with PaymentProcessorInterface
      * @param amount 

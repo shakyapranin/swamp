@@ -2,10 +2,13 @@ import { StripeService } from "./services/StripeService";
 import express, { Request, Response } from "express";
 import { Stripe } from "./services/mocks/Stripe";
 import { StripeController } from "./controllers/StripeController";
+import PaymentStrategyRegistry from "./services/PaymentStrategyRegistry";
+import { PaymentController } from "./controllers/PaymentController";
 const PORT = 9000; // HINT: Should this value be an environment variable?
 
 const app = express();
 const stripeService = new StripeService(new Stripe('testStripeKey')); // HINT: Should the stripe key be static here? May be an environment variable should be used.
+const paymentStrategyRegistry = new PaymentStrategyRegistry();
 
 app.use(express.json());
 
@@ -28,6 +31,12 @@ app.post('/stripe/refund', (req: Request, res: Response) => {
 app.post('/stripe/transaction', (req: Request, res: Response) => {
     const stripeController = new StripeController('testStripeKey');
     return res.json(stripeController.getTransactionByStatus(req));
+});
+
+// INFO: Notice how this controller function is cleaner and more versatile to handle stripe transactions as well as cash
+app.post('/gateway/pay', (req: Request, res: Response) => {
+    const paymentController = new PaymentController(paymentStrategyRegistry);
+    return res.json(paymentController.pay(req, res));
 });
 
 // HINT: Should the PORT variable be used here after it has been converted into an environment variable?

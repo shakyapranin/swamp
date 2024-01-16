@@ -18,6 +18,7 @@ export class StripeService {
      * HINT: Missing access specifier
      */
     processPayment(amount: number, paymentMethod: string, details: Object = {}): StripeResponse {
+        
         if(paymentMethod === "Apple Pay") {
             // HINT: The number arguments have started increase may be have a Request object?
             // HINT: The request object will be needed to be created in multiple cases? May be apply a builder pattern here

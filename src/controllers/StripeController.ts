@@ -1,6 +1,6 @@
 import { Request } from "express";
 import { StripeService } from "../services/StripeService";
-import { Stripe } from "../services/mocks/Stripe";
+import { Stripe, StripeResponse } from "../services/mocks/Stripe";
 import StripeRefundRequestBuilder from "../builders/StripeRefundRequestBuilder";
 import InvalidDataException from "../exceptions/InvalidDataException";
 import { STATUS_CODES } from "../consts/STATUSCODES";
@@ -19,11 +19,11 @@ export class StripeController {
      * @param request 
      * @returns 
      */
-    public refund(request: Request): SwampResponse {
+    public refund(request: Request): SwampResponse{
         const amount = request.body.amount;
         const paymentMethod = request.body.paymentMethod;
         const details = request.body.details;
-        let response;
+        let response: StripeResponse | undefined;
         const stripeRefundRequest = new StripeRefundRequestBuilder(amount, paymentMethod)
             .setDetails(details)
             .build();
@@ -34,7 +34,7 @@ export class StripeController {
                 stripeRefundRequest.amount,
                 stripeRefundRequest.paymentMethod
             );
-        } catch (error) {
+        } catch (error: any) {
             if (error instanceof InvalidDataException) {
                 // INFO: Constructing application specific error message is healthy so as to only show meaningful message.
                 // INFO: Returning direct response from third party service may result in data breach.
@@ -47,7 +47,7 @@ export class StripeController {
         // INFO: Notice how response is constructed in the controller regardless of the external response
         return {
             statusCode: STATUS_CODES.OK,
-            message: response.message,
+            message: response && response.message || "Server error occurred.",
         }
     }
 
@@ -61,7 +61,7 @@ export class StripeController {
         let response;
         try {
             response = this.stripeService.getTransactionsByStatus(status);
-        }catch (error) {
+        }catch (error: any) {
             return {
                 statusCode: STATUS_CODES.BAD_REQUEST,
                 message: error.message
