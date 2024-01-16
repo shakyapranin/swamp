@@ -23,12 +23,35 @@ export class PaymentController {
         if (!strategy) {
             return {
                 statusCode: STATUS_CODES.BAD_REQUEST,
-                message: "Unsupported payment method",
+                message: "Unsupported gateway type.",
             };
         }
         const amount = req.body.amount;
         const details = req.body.details;
         const paymentMethod = req.body.paymentMethod || null;
         return strategy.processPayment(amount, paymentMethod, details);
+    }
+
+    /**
+     * Refund payment
+     * HINT: Notice how getting right strategy as gateway type is repeated. Apply DRY principle here.
+     * HINT: Private functions are good way to maintain DRY principle and maintain encapsulation inside a class.
+     * @param req 
+     * @param res 
+     * @returns 
+     */
+    public refund(req: Request, res: Response): SwampResponse {
+        const gatewayType = req.body.gatewayType;
+        const strategy = this.strategyRegistry.getStrategy(gatewayType);
+        if (!strategy) {
+            return {
+                statusCode: STATUS_CODES.BAD_REQUEST,
+                message: "Unsupported gateway type.",
+            };
+        }
+        const amount = req.body.amount;
+        const details = req.body.details;
+        const paymentMethod = req.body.paymentMethod || null;
+        return strategy.refundPayment(amount, paymentMethod);
     }
 }

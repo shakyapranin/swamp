@@ -1,7 +1,9 @@
 import { STATUS_CODES } from "../consts/STATUSCODES";
+import RefundEvent from "../emitters/Event";
 import { EmailFacade } from "../facades/EmailFacade";
 import PaymentProcessorInterface, { PaymentProcessorResponse } from "../interfaces/PaymentProcessorInterface";
 import { Transaction } from "../interfaces/Transaction";
+import RefundObserver from "../observers/RefundObserver";
 import { compareString } from "../utils/string";
 import { CashPaymentProcessor } from "./mocks/CashPaymentProcessor";
 
@@ -9,10 +11,18 @@ import { CashPaymentProcessor } from "./mocks/CashPaymentProcessor";
 export default class CashAdapterService implements PaymentProcessorInterface {
     private cashPaymentProcessor: CashPaymentProcessor;
     private transactions: Array<Transaction>;
+    refundObserver: RefundObserver;
+    refundEvent: RefundEvent;
 
     constructor(cashPaymentProcessor: CashPaymentProcessor, transactions: Array<Transaction> = []) {
         this.cashPaymentProcessor = cashPaymentProcessor;
         this.transactions = transactions;
+
+        // HINT: Would be better to initialize event listeners else where
+        // INFO: Usually Event observers are configured by Frameworks when bootstrapping
+        this.refundEvent = new RefundEvent();
+        this.refundObserver = new RefundObserver();
+        this.refundEvent.subscribe(this.refundObserver); // INFO: Subscribe RefundObserver to listen to listen for refund events
     }
 
     /**
@@ -27,7 +37,7 @@ export default class CashAdapterService implements PaymentProcessorInterface {
     processPayment(amount: number, _paymentMethod: String = 'cash', details: Object): PaymentProcessorResponse {
         try {
             const response = this.cashPaymentProcessor.payCash(amount);
-            const emailFacade = EmailFacade.getInstance();
+            const emailFacade = EmailFacade.getInstance(); // INFO: Notice how a static method is used to access a singleton object
             const emailContent = {
                 subject: "Cash Payment Successful.",
                 body: `Cash payment of ${amount} is made successfully.`,
@@ -61,6 +71,7 @@ export default class CashAdapterService implements PaymentProcessorInterface {
     refundPayment(amount: number, _paymentMethod: String = 'cash'): PaymentProcessorResponse {
         try {
             const response = this.cashPaymentProcessor.refundCash(amount);
+            this.refundEvent.notify({ type: 'refundProcessed', amount });
             return {
                 statusCode: STATUS_CODES.OK,
                 message: "Cash refund successful.",

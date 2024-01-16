@@ -39,6 +39,11 @@ app.post('/gateway/pay', (req: Request, res: Response) => {
     return res.json(paymentController.pay(req, res));
 });
 
+app.post('/gateway/refund', (req: Request, res: Response) => {
+    const paymentController = new PaymentController(paymentStrategyRegistry);
+    return res.json(paymentController.refund(req, res));
+});
+
 // HINT: Should the PORT variable be used here after it has been converted into an environment variable?
 app.listen(9000, () => {
     console.log(`Application listening on ${PORT}`);
