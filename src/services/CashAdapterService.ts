@@ -1,4 +1,5 @@
 import { STATUS_CODES } from "../consts/STATUSCODES";
+import { EmailFacade } from "../facades/EmailFacade";
 import PaymentProcessorInterface, { PaymentProcessorResponse } from "../interfaces/PaymentProcessorInterface";
 import { Transaction } from "../interfaces/Transaction";
 import { compareString } from "../utils/string";
@@ -26,6 +27,17 @@ export default class CashAdapterService implements PaymentProcessorInterface {
     processPayment(amount: number, _paymentMethod: String = 'cash', details: Object): PaymentProcessorResponse {
         try {
             const response = this.cashPaymentProcessor.payCash(amount);
+            const emailFacade = EmailFacade.getInstance();
+            const emailContent = {
+                subject: "Cash Payment Successful.",
+                body: `Cash payment of ${amount} is made successfully.`,
+                to: "someone@somemail.com"
+            };
+            const emailResponse = emailFacade.sendEmail(emailContent);
+            if(!emailResponse){
+                // HINT: May be implement a logger service to log for errors.
+                console.log("Unable to send email.");
+            }
             return {
                 statusCode: STATUS_CODES.OK,
                 message: "Cash payment successful.",
