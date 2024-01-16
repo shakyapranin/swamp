@@ -36,8 +36,8 @@ export class StripeController {
             );
         } catch (error) {
             if (error instanceof InvalidDataException) {
-                // INFO: Constructing application specific error message is healthy so as to only show meaning message.
-                // INFO: Returning direct response from third party service may result in data breach
+                // INFO: Constructing application specific error message is healthy so as to only show meaningful message.
+                // INFO: Returning direct response from third party service may result in data breach.
                 return {
                     statusCode: STATUS_CODES.BAD_REQUEST,
                     message: error.message
