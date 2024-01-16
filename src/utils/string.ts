@@ -6,3 +6,14 @@ export function compareString(string1: string, string2: string): boolean {
     }
     return true;
 }
+
+// HINT: This is something fancy that you believe would be used in the future, follow YAGNI principle
+export function printTriangle(rows: number, character: string): void {
+    for (let i = 1; i <= rows; i++) {
+        let chars = '';
+        for (let j = 1; j <= i; j++) {
+            chars += character;
+        }
+        console.log(chars);
+    }
+}

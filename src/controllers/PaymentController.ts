@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { STATUS_CODES } from "../consts/STATUSCODES";
 import SwampResponse from "../interfaces/SwampResponse";
 import PaymentStrategyRegistry from "../services/PaymentStrategyRegistry";
+import { printStars } from "../utils/string";
 
 export class PaymentController {
     private strategyRegistry: PaymentStrategyRegistry;
@@ -41,6 +42,7 @@ export class PaymentController {
      * @returns 
      */
     public refund(req: Request, res: Response): SwampResponse {
+        printStars(8, '*');
         const gatewayType = req.body.gatewayType;
         const strategy = this.strategyRegistry.getStrategy(gatewayType);
         if (!strategy) {
