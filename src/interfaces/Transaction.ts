@@ -1,4 +1,4 @@
 export interface Transaction {
-    amount: number;
-    status: string;
-};
+  amount: number;
+  status: string;
+}

@@ -1,18 +1,18 @@
 export default interface PaymentProcessorInterface {
-    processPayment(
-        amount: number,
-        paymentMethod: String,
-        details: Object
-    ): PaymentProcessorResponse;
-    refundPayment(
-        amount: number,
-        paymentMethod: String
-    ): PaymentProcessorResponse;
-    getTransactionsByStatus(status: string): PaymentProcessorResponse;
+  processPayment(
+    amount: number,
+    paymentMethod: string,
+    details: object,
+  ): PaymentProcessorResponse;
+  refundPayment(
+    amount: number,
+    paymentMethod: string,
+  ): PaymentProcessorResponse;
+  getTransactionsByStatus(status: string): PaymentProcessorResponse;
 }
 
 export interface PaymentProcessorResponse {
-    statusCode: number;
-    message: string;
-    data?: any;
+  statusCode: number;
+  message: string;
+  data?: object;
 }

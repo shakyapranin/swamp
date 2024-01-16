@@ -4,7 +4,7 @@ import InvalidDataException from "../../src/exceptions/InvalidDataException";
 import { StripeService } from "../../src/services/StripeService";
 import { Stripe } from "../../src/services/mocks/Stripe";
 
-describe('processPayment', () => {
+describe("processPayment", () => {
   // Create an instance of StripeService for testing
   let stripeService: StripeService;
 
@@ -22,7 +22,9 @@ describe('processPayment', () => {
 
     // Assert that the response is as expected
     expect(response.statusCode).toBe(STATUS_CODES.OK);
-    expect(response.message).toBe(`Wallet payment for ${amount} successfully processed.`);
+    expect(response.message).toBe(
+      `Wallet payment for ${amount} successfully processed.`,
+    );
   });
 
   it("should process payment using Credit Card", () => {
@@ -34,7 +36,9 @@ describe('processPayment', () => {
 
     // Assert that the response is as expected
     expect(response.statusCode).toBe(STATUS_CODES.OK);
-    expect(response.message).toBe(`Card payment for ${amount} successfully processed.`);
+    expect(response.message).toBe(
+      `Card payment for ${amount} successfully processed.`,
+    );
   });
 
   it("should return an error for an invalid payment method", () => {
@@ -50,7 +54,7 @@ describe('processPayment', () => {
   });
 });
 
-describe('refundPayment', () => {
+describe("refundPayment", () => {
   // Create an instance of StripeService for testing
   let stripeService: StripeService;
 
@@ -66,7 +70,9 @@ describe('refundPayment', () => {
     const response = stripeService.refundPayment(amount, paymentMethod);
 
     expect(response.statusCode).toBe(STATUS_CODES.OK);
-    expect(response.message).toBe("Wallet refund for 100 successfully processed.");
+    expect(response.message).toBe(
+      "Wallet refund for 100 successfully processed.",
+    );
   });
 
   it("should refund payment for valid Credit Card payment", () => {
@@ -76,7 +82,9 @@ describe('refundPayment', () => {
     const response = stripeService.refundPayment(amount, paymentMethod);
 
     expect(response.statusCode).toBe(STATUS_CODES.OK);
-    expect(response.message).toBe("Card refund for 200 successfully processed.");
+    expect(response.message).toBe(
+      "Card refund for 200 successfully processed.",
+    );
   });
 
   it("should return invalid data for Credit card", () => {
@@ -87,8 +95,9 @@ describe('refundPayment', () => {
     // TODO: Fix this to use mock instead of function override
     stripeService.stripeClient.validateCardPayment = () => false;
 
-    expect(() => stripeService.refundPayment(amount, paymentMethod))
-    .toThrow(InvalidDataException);
+    expect(() => stripeService.refundPayment(amount, paymentMethod)).toThrow(
+      InvalidDataException,
+    );
   });
 
   it("should return error for invalid payment method", () => {
@@ -102,28 +111,33 @@ describe('refundPayment', () => {
   });
 });
 
-describe('getTransactionsByStatus', () => {
-
-  it('should return an empty array if no transactions match the status', () => {
+describe("getTransactionsByStatus", () => {
+  it("should return an empty array if no transactions match the status", () => {
     const mockTransactions = [
       { amount: 100, status: TRANSACTION_STATUS.SUCCESS },
       { amount: 200, status: TRANSACTION_STATUS.SUCCESS },
       { amount: 300, status: TRANSACTION_STATUS.FAILURE },
     ];
-    const stripeService = new StripeService(new Stripe("stripe_key"), mockTransactions);
-    const result = stripeService.getTransactionsByStatus('pending');
+    const stripeService = new StripeService(
+      new Stripe("stripe_key"),
+      mockTransactions,
+    );
+    const result = stripeService.getTransactionsByStatus("pending");
 
     expect(result.data).toEqual([]);
   });
 
-  it('should return an array of transactions that match the status', () => {
+  it("should return an array of transactions that match the status", () => {
     const mockTransactions = [
       { amount: 100, status: TRANSACTION_STATUS.SUCCESS },
       { amount: 200, status: TRANSACTION_STATUS.PENDING },
       { amount: 300, status: TRANSACTION_STATUS.SUCCESS },
     ];
-    const stripeService = new StripeService(new Stripe("stripe_key"), mockTransactions);
-    const result = stripeService.getTransactionsByStatus('success');
+    const stripeService = new StripeService(
+      new Stripe("stripe_key"),
+      mockTransactions,
+    );
+    const result = stripeService.getTransactionsByStatus("success");
 
     expect(result.data).toEqual([
       { amount: 100, status: TRANSACTION_STATUS.SUCCESS },
@@ -131,4 +145,3 @@ describe('getTransactionsByStatus', () => {
     ]);
   });
 });
-
