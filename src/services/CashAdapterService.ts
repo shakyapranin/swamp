@@ -92,6 +92,7 @@ export default class CashAdapterService implements PaymentProcessorInterface {
     try {
       const responseAmount = this.cashPaymentProcessor.refundCash(amount);
       // INFO: Notice how event is used to notify and group event listeners functionality
+      // INFO: Notice how Email facade is not directly used here
       this.refundEvent.notify({ type: "refundProcessed", amount });
       return {
         statusCode: STATUS_CODES.OK,
