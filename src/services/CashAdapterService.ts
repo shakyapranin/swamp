@@ -1,6 +1,6 @@
 import { STATUS_CODES } from "../consts/STATUSCODES";
 import RefundEvent from "../emitters/Event";
-import { EmailFacade } from "../facades/EmailFacade";
+import { EmailFacade } from "@src/facades/EmailFacade";
 import PaymentProcessorInterface, {
   PaymentProcessorResponse,
 } from "../interfaces/PaymentProcessorInterface";

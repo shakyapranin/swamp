@@ -3,5 +3,8 @@
     "verbose": true,
     "preset": "ts-jest",
     "collectCoverage": true,
-    "coverageReporters": ["lcov", "text"]
+    "coverageReporters": ["lcov", "text"],
+    "moduleNameMapper": {
+      "@src/(.*)": "<rootDir>/src/$1"
+    }
   }
