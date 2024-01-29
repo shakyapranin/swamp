@@ -4,6 +4,7 @@ import { Stripe } from "./services/mocks/Stripe";
 import { StripeController } from "./controllers/StripeController";
 import PaymentStrategyRegistry from "./services/PaymentStrategyRegistry";
 import { PaymentController } from "./controllers/PaymentController";
+import customerRouter from "./routes/customers";
 const PORT = 9000; // HINT: Should this value be an environment variable?
 
 const app = express();
@@ -45,6 +46,8 @@ app.post("/gateway/refund", (req: Request, res: Response) => {
   const paymentController = new PaymentController(paymentStrategyRegistry);
   return res.json(paymentController.refund(req, res));
 });
+
+app.use("/customers/", customerRouter);
 
 // HINT: Should the PORT variable be used here after it has been converted into an environment variable?
 app.listen(9000, () => {
